@@ -179,7 +179,9 @@ def test_performance_against_baseline(train_model):
     current_model, X_test, y_test = train_model
 
     # ベースラインモデルのロード
-    assert os.path.exists(BASELINE_MODEL_PATH), "ベースラインモデルファイルが存在しません"
+    assert os.path.exists(
+        BASELINE_MODEL_PATH
+    ), "ベースラインモデルファイルが存在しません"
     with open(BASELINE_MODEL_PATH, "rb") as f:
         baseline_model = pickle.load(f)
 
@@ -195,4 +197,6 @@ def test_performance_against_baseline(train_model):
     print(f"Baseline model accuracy: {baseline_accuracy:.4f}")
 
     # 性能比較のアサーション (例: 現在の精度がベースラインの95%以上であること)
-    assert current_accuracy >= (baseline_accuracy * 0.95), f"Current accuracy {current_accuracy:.4f} is significantly lower than baseline accuracy {baseline_accuracy:.4f}"
+    assert current_accuracy >= (
+        baseline_accuracy * 0.95
+    ), f"Current accuracy {current_accuracy:.4f} is significantly lower than baseline accuracy {baseline_accuracy:.4f}"
