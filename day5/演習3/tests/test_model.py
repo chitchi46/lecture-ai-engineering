@@ -200,3 +200,27 @@ def test_performance_against_baseline(train_model):
     assert current_accuracy >= (
         baseline_accuracy * 0.95
     ), f"Current accuracy {current_accuracy:.4f} is significantly lower than baseline accuracy {baseline_accuracy:.4f}"
+
+
+def test_inference_time(train_model):
+    """モデルの推論時間が許容範囲内であることを検証"""
+    model, X_test, _ = train_model
+
+    # 非常に少量のデータで何度も実行すると、キャッシュ等の影響で正確に測れない場合があるので
+    # ある程度の量のデータ（ここではX_test全体）で一度だけ計測する
+    # もしX_testが巨大すぎる場合は、適切なサイズのサンプルデータを使うことを検討
+
+    start_time = time.time()
+    model.predict(X_test)
+    end_time = time.time()
+
+    inference_time = end_time - start_time
+    print(f"Inference time: {inference_time:.4f} seconds")
+
+    # 許容される推論時間の上限（例: 0.1秒）
+    # この値はデータサイズやマシンスペックによって調整が必要
+    MAX_INFERENCE_TIME = 0.1
+
+    assert (
+        inference_time <= MAX_INFERENCE_TIME
+    ), f"Inference time {inference_time:.4f} exceeds the limit of {MAX_INFERENCE_TIME:.4f} seconds"
